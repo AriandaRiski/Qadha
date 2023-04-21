@@ -1,4 +1,8 @@
+import { useSession } from "next-auth/react";
+
 const Header = () => {
+    const {data : session} = useSession();
+
  return (
     <>
         <div className="navbar navbar-dark bg-dark shadow-sm">
@@ -8,7 +12,9 @@ const Header = () => {
                     <strong>Qadha</strong>
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon" />
+                    {/* <span className="navbar-toggler-icon" /> */}
+                    <img src={session ? session.user.image : ''} width={20} height={20}/>
+                    {session ? session.user.name : ''}
                 </button>
             </div>
         </div>

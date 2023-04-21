@@ -1,6 +1,12 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
+//database: qadha
+//username: 8rjxid9b233g7hdlh6cv
+//host: aws.connect.psdb.cloud
+//password: pscale_pw_4A7FJowfZF81m3gwEWnZPb5LVWG5aPRCvAE7DshKlct
+
 generator client {
   provider = "prisma-client-js"
 }

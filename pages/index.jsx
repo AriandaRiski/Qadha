@@ -1,9 +1,10 @@
 import Layout from "@/layouts/Layout";
-import Transisi from "@/components/pendaftaran/trans";
-import {Button, Tab, Tabs} from 'react-bootstrap';
+import {Tab, Tabs} from 'react-bootstrap';
 import Puasa from "./puasa";
 import { useState } from "react";
 import AppContext from "@/context/appContext";
+import Link from "next/link";
+import { getSession, signOut, useSession } from "next-auth/react";
 
 const Shalat = () => {
     return (
@@ -30,17 +31,23 @@ const home = ({puasa}) => {
 
     const [dataPuasa, setDataPuasa] = useState(puasa);
 
+    const {data : session} = useSession();
+
+    const handleLogout = () => {
+        signOut()
+    }
+
     return (
         <>
             <Layout title="Qadha">
             <main>
                 <div className="px-4 pt-5 my-5 text-center border-bottom">
-                    <h1 className="display-4 fw-bold text-body-emphasis">Centered screenshot</h1>
+                    <h1 className="display-4 fw-bold text-body-emphasis">{session ? session.user.name : ''}</h1>
                     <div className="col-lg-6 mx-auto">
                         <p className="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
                         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-                            <button type="button" className="btn btn-primary btn-lg px-4 me-sm-3">Primary button</button>
-                            <button type="button" className="btn btn-outline-secondary btn-lg px-4">Secondary</button>
+                            {/* <Link href="/login" className="btn btn-primary btn-lg px-4 me-sm-3">Login</Link> */}
+                            <button type="button" className="btn btn-danger" onClick={handleLogout}>Logout</button>
                         </div>
                     </div>
                     <div className="overflow-hidden" style={{maxHeight: '30vh'}}>
@@ -51,12 +58,12 @@ const home = ({puasa}) => {
                 </div>
             </main>
             {/* <div className="b-example-divider" /> */}
+
                 <div className="album py-5 bg-light">
                     <div className="container">
                         <div className="position-relative">
                             <Tabs defaultActiveKey="tab_puasa" id="uncontrolled-tab-example" className="mb-3" fill>
                                 <Tab eventKey="tab_puasa" title="Puasa">
-
                                     <AppContext.Provider 
                                         value = {{
                                             puasa : dataPuasa,
@@ -73,18 +80,29 @@ const home = ({puasa}) => {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            </Layout>  
         </>
       )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req}) {
+    const session = await getSession({req})
+    if(!session){
+        return{
+            redirect : {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
     const response = await fetch("http://localhost:3000/api/puasa");
     const puasa = await response.json();
 
     return { 
         props: { 
-            puasa : puasa
+            puasa : puasa,
+            session
         } 
     }
 }

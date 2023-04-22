@@ -3,8 +3,7 @@ import {Tab, Tabs} from 'react-bootstrap';
 import Puasa from "./puasa";
 import { useState } from "react";
 import AppContext from "@/context/appContext";
-import Link from "next/link";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 const Shalat = () => {
     return (
@@ -33,10 +32,6 @@ const home = ({puasa}) => {
 
     const {data : session} = useSession();
 
-    const handleLogout = () => {
-        signOut()
-    }
-
     return (
         <>
             <Layout title="Qadha">
@@ -46,8 +41,6 @@ const home = ({puasa}) => {
                     <div className="col-lg-6 mx-auto">
                         <p className="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
                         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-                            {/* <Link href="/login" className="btn btn-primary btn-lg px-4 me-sm-3">Login</Link> */}
-                            <button type="button" className="btn btn-danger" onClick={handleLogout}>Logout</button>
                         </div>
                     </div>
                     <div className="overflow-hidden" style={{maxHeight: '30vh'}}>

@@ -43,7 +43,7 @@ export default function Register() {
                                 <label htmlFor="floatingPassword">Password</label>
                             </div>
 
-                            <div class="d-grid gap-2 mx-auto">
+                            <div className="d-grid gap-2 mx-auto">
                                 <button type="submit" className="btn btn-primary btn-lg btn-block">Register</button>
                                 <p>Login <Link href="/login">Disini</Link> </p>
                                 <div className="divider d-flex align-items-center my-4">

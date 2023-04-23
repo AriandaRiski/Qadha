@@ -22,3 +22,10 @@ model Puasa {
   nama_puasa  String  @db.VarChar(250)
   tanggal_puasa DateTime @default(now())
 }
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique @db.VarChar(256)
+  username  String    @db.VarChar(50)
+  password  String    @db.VarChar(100)
+}

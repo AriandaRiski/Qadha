@@ -21,7 +21,7 @@ const Header = () => {
                         <ButtonGroup>
                             <Button variant="white"><img src={session ? session.user.image : ''} width={40} height={40}/></Button>
 
-                            <DropdownButton as={ButtonGroup} title = {session.user.name} variant="dark">
+                            <DropdownButton as={ButtonGroup} title = {session.user.email} variant="dark">
                                 <Dropdown.Item eventKey="1">
                                     <Button type="button" variant="white" onClick={handleLogout}>Logout</Button>
                                 </Dropdown.Item>

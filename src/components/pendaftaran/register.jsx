@@ -1,5 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import { useFormik } from 'formik';
+import { signIn } from 'next-auth/react';
+
 
 export default function Register() {
 
@@ -8,6 +11,19 @@ export default function Register() {
         // TODO: add login functionality here
         signIn('google',{callbackUrl : "http://localhost:3000"})
       };
+
+      const formik = useFormik({
+        initialValues : {
+            username : '',
+            email : '',
+            password: ''
+        },
+        onSubmit
+      })
+
+      async function onSubmit(values){
+        console.log(values)
+      }
 
   return (
    <>
@@ -18,28 +34,17 @@ export default function Register() {
                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
                     </div>
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                        <form>
-                            <div className="row">
-                                <div className="col-md-6 mb-4">
-                                    <div className="form-floating mb-3">
-                                        <input type="text" className="form-control" id="floatingInput" placeholder="first name" />
-                                        <label htmlFor="floatingInput">First Name</label>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 mb-4">
-                                    <div className="form-floating mb-3">
-                                        <input type="text" className="form-control" id="floatingInput" placeholder="last name" />
-                                        <label htmlFor="floatingInput">Last Name</label>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <form onSubmit={formik.handleSubmit}>
                             <div className="form-floating mb-3">
-                                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                <input type="text" className="form-control" name='username' placeholder="username" {...formik.getFieldProps('username')} />
+                                <label htmlFor="floatingInput">Username</label>
+                            </div>
+                            <div className="form-floating mb-3">
+                                <input type="email" className="form-control" name='email' placeholder="name@example.com" {...formik.getFieldProps('email')} />
                                 <label htmlFor="floatingInput">Email address</label>
                             </div>
                             <div className="form-floating mb-3">
-                                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                <input type="password" className="form-control" name='password' placeholder="Password" {...formik.getFieldProps('password')}/>
                                 <label htmlFor="floatingPassword">Password</label>
                             </div>
 

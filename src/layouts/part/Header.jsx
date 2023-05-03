@@ -1,4 +1,5 @@
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { DropdownButton, Dropdown, ButtonGroup, Button } from "react-bootstrap";
 
 const handleLogout = () => {
@@ -19,7 +20,7 @@ const Header = () => {
                             <strong>Qadha</strong>
                         </a>
                         <ButtonGroup>
-                            <Button variant="white"><img src={session ? session.user.image : ''} width={40} height={40}/></Button>
+                            <Button variant="white"><Image src={session ? session.user.image : 'https://www.pngwing.com/en/free-png-zlrqq'} width={40} height={40} alt="profile"/></Button>
 
                             <DropdownButton as={ButtonGroup} title = {session.user.email} variant="dark">
                                 <Dropdown.Item eventKey="1">

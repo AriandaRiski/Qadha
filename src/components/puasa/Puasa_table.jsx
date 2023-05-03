@@ -10,7 +10,7 @@ const Puasa_table = ({puasa, handleDelete, setEditPuasa}) => {
                     puasa.map((puasa, index) => {
 
                         return (
-                            <Input key = {puasa} puasa = {puasa} setEditPuasa={setEditPuasa} handleDelete={handleDelete} index={index}/>
+                            <Input key = {puasa} keyPuasa = {puasa} setEditPuasa={setEditPuasa} handleDelete={handleDelete} number={index}/>
                         )
                     })
                 }

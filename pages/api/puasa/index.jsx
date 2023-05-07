@@ -26,9 +26,7 @@ const addPuasa = async(req,res) => {
 
         const data = {
             nama_puasa : nama_puasa,
-            // tanggal_puasa : new Date().toISOString()
-            // tanggal_puasa : JSON.parse(JSON.stringify(new Date()))
-            tanggal_puasa : tanggal_puasa ?? new Date().toJSON()
+            tanggal_puasa : tanggal_puasa
         }
 
         const result = await prisma.puasa.create({
@@ -38,7 +36,7 @@ const addPuasa = async(req,res) => {
             }
         })
 
-        // return res.status(200).json({success : true, result });
+        // return res.status(200).json({success : true, result, message : "Data Berhasil ditambahkan!" });
         return res.status(200).json({...result, nama_puasa, tanggal_puasa, message : "Data Berhasil ditambahkan!"});
 
     } catch (error) {

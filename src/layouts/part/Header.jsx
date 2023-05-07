@@ -20,7 +20,13 @@ const Header = () => {
                             <strong>Qadha</strong>
                         </a>
                         <ButtonGroup>
-                            <Button variant="white"><Image src={session ? session.user.image : 'https://www.pngwing.com/en/free-png-zlrqq'} width={40} height={40} alt="profile"/></Button>
+                            <Button variant="white">
+                                <Image src={ session.user.image ?? "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" }
+                                    width={40}
+                                    height={40} 
+                                    alt="profile"
+                                />
+                            </Button>
 
                             <DropdownButton as={ButtonGroup} title = {session.user.email} variant="dark">
                                 <Dropdown.Item eventKey="1">

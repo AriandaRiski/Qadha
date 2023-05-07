@@ -11,7 +11,7 @@ export default function Login() {
     const handleGoogle = async(e) => {
         e.preventDefault();
         // TODO: add login functionality here
-        signIn('google',{callbackUrl : "http://localhost:3000"})
+        signIn('google',{callbackUrl : "http://localhost:3000/user/qadha_puasa"})
       };
 
     const formik = useFormik({
@@ -27,7 +27,7 @@ export default function Login() {
             redirect : false,
             email : values.email,
             password : values.password,
-            callbackUrl : "/"
+            callbackUrl : "/user/qadha_puasa/test"
         })
         if(status.ok) router.push(status.url)
     }

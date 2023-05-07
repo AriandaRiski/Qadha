@@ -48,7 +48,7 @@ const updatePuasa = async(req, res) => {
 
             data : {
                 nama_puasa : nama_puasa,
-                tanggal_puasa : tanggal_puasa ?? new Date().toJSON()
+                tanggal_puasa : tanggal_puasa
             }
         })
 

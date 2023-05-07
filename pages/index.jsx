@@ -1,10 +1,10 @@
 import Layout from "@/layouts/Layout";
-import {Tab, Tabs} from 'react-bootstrap';
-import Puasa from "./qadha_puasa";
+import {Button, Tab, Tabs} from 'react-bootstrap';
 import { useState } from "react";
 import AppContext from "@/context/appContext";
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Shalat = () => {
     return (
@@ -38,10 +38,13 @@ const Home = ({puasa}) => {
             <Layout title="Qadha">
             <main>
                 <div className="px-4 pt-5 my-5 text-center border-bottom">
-                    <h1 className="display-4 fw-bold text-body-emphasis">{session ? session.user.name : ''}</h1>
+                    <h1 className="display-4 fw-bold text-body-emphasis">test</h1>
                     <div className="col-lg-6 mx-auto">
                         <p className="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the worlds most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
                         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+                            <Button variant="secondary">
+                                <Link href={"/login"}>Login</Link>
+                            </Button>
                         </div>
                     </div>
                     <div className="overflow-hidden" style={{maxHeight: '30vh'}}>
@@ -53,7 +56,7 @@ const Home = ({puasa}) => {
             </main>
             {/* <div className="b-example-divider" /> */}
 
-                <div className="album py-5 bg-light">
+                {/* <div className="album py-5 bg-light">
                     <div className="container">
                         <div className="position-relative">
                             <Tabs defaultActiveKey="tab_puasa" id="uncontrolled-tab-example" className="mb-3" fill>
@@ -63,7 +66,7 @@ const Home = ({puasa}) => {
                                             puasa : dataPuasa,
                                             setDataPuasa : setDataPuasa
                                     }}>
-                                    <Puasa/>
+                                    
                                     </AppContext.Provider>
 
                                 </Tab>
@@ -73,33 +76,11 @@ const Home = ({puasa}) => {
                             </Tabs>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </Layout>  
         </>
       )
 }
 
-export async function getServerSideProps({req}) {
-    const session = await getSession({req})
-    if(!session){
-        return{
-            redirect : {
-                destination: '/login',
-                permanent: false
-            }
-        }
-    }
 
-    const response = await fetch("http://localhost:3000/api/puasa");
-    const getPuasa = await response.json();
-
-    return { 
-        props: { 
-            puasa : getPuasa,
-            session
-        } 
-    }
-}
-
-
-// export default Home;
+export default Home;

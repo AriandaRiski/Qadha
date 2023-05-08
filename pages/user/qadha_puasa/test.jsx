@@ -26,7 +26,7 @@ export default function Test({ puasa }) {
 
 export async function getServerSideProps() {
 
-  const response = await fetch("http://localhost:3000/api/puasa");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa`);
   const getPuasa = await response.json();
 
   return {

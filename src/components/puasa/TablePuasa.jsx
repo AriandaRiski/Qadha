@@ -1,9 +1,10 @@
 import { React, useState, useEffect, useContext } from 'react'
 import DataTable, { Direction } from 'react-data-table-component';
-import { Button, Modal, FloatingLabel, Form, Navbar } from 'react-bootstrap';
+import { Button, Modal, FloatingLabel, Form, ButtonGroup, Dropdown } from 'react-bootstrap';
 import AppContext from '@/context/appContext';
 import Alerts from './Alerts';
 import moment from 'moment';
+import { isMobile } from 'react-device-detect';
 
 export default function TablePuasa() {
 
@@ -26,7 +27,6 @@ export default function TablePuasa() {
   const [savePuasa, setSavePuasa] = useState({
     nama_puasa: "",
     tanggal_puasa: new Date().toJSON()
-    // tanggal_puasa: ""
   })
 
   const handleSave = (e) => {
@@ -42,12 +42,12 @@ export default function TablePuasa() {
       body: JSON.stringify(savePuasa)
     }
 
-    const response = await fetch("http://localhost:3000/api/puasa/", reqOption);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa/`, reqOption);
     const result = await response.json();
 
     setSavePuasa({
       nama_puasa: "",
-      tanggal_puasa: ""
+      tanggal_puasa: new Date().toJSON()
     })
 
     if (result) {
@@ -55,9 +55,12 @@ export default function TablePuasa() {
       setMessage(result.message);
       handleClose();
 
-      const prevPuasa = value.puasa;
+      const prevPuasa = value.puasa.filter(puasa => {
+        return puasa.id != savePuasa.id
+      })
       prevPuasa.push(result);
       value.setDataPuasa(prevPuasa);
+      setData(prevPuasa)
     }
   }
 
@@ -81,7 +84,7 @@ export default function TablePuasa() {
       body: JSON.stringify(editPuasa)
     }
 
-    const response = await fetch("http://localhost:3000/api/puasa/" + editPuasa.id, reqOption);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa/` + editPuasa.id, reqOption);
     const result = await response.json();
 
     if (result) {
@@ -93,6 +96,7 @@ export default function TablePuasa() {
       })
       prevPuasa.push(result.data);
       value.setDataPuasa(prevPuasa);
+      setData(prevPuasa)
     }
   }
 
@@ -107,7 +111,7 @@ export default function TablePuasa() {
       method: "DELETE"
     }
 
-    const response = await fetch("http://localhost:3000/api/puasa/" + id, reqOption);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa/` + id, reqOption);
     const result = await response.json();
 
     if (result) {
@@ -131,13 +135,14 @@ export default function TablePuasa() {
       setPending(false);
     }, 800);
     return () => clearTimeout(timeout);
-  });
+  }, [value.puasa]);
 
   const columns = [
-    // {
-    //   name: '#',
-    //   selector: (row, index) => index + 1,
-    // },
+    {
+      name: '#',
+      selector: (row, index) => index + 1,
+      width: '50px'
+    },
     {
       name: 'Nama Puasa',
       selector: row => row.nama_puasa,
@@ -148,25 +153,6 @@ export default function TablePuasa() {
     },
     {
       cell: (row) => {
-        const handleModalEdit = (id) => {
-          const ids = id.id;
-
-          handleShowEdit(ids);
-          setRowData(id)
-          setEditPuasa(id)
-        }
-        return (
-          <>
-            <Button variant='warning' onClick={() => handleModalEdit(row)}>Edit</Button>
-          </>
-        )
-      },
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
-    {
-      cell: (row) => {
         const handleModalDelete = (id) => {
 
           const ids = id.id;
@@ -174,16 +160,48 @@ export default function TablePuasa() {
           setRowData(id)
         }
 
+        const handleModalEdit = (id) => {
+          const ids = id.id;
+
+          handleShowEdit(ids);
+          setRowData(id)
+          setEditPuasa(id)
+        }
+
+        const btn1 = (
+          <>
+            <Dropdown>
+              <Dropdown.Toggle split variant="transparant" />
+              <Dropdown.Menu>
+                <Dropdown.Item><Button variant='warning' onClick={() => handleModalEdit(row)}>Edit</Button></Dropdown.Item>
+                <Dropdown.Item><Button variant='danger' onClick={() => handleModalDelete(row)}>Hapus</Button></Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </>
+        )
+
+        const btn2 = (
+          <>
+            <ButtonGroup className="me-2" >
+              <Button variant='outline-warning' onClick={() => handleModalEdit(row)}>Edit</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button variant='outline-danger' onClick={() => handleModalDelete(row)}>Hapus</Button>
+            </ButtonGroup>
+          </>
+        )
+
         return (
           <>
-            <Button variant='danger' onClick={() => handleModalDelete(row)}>Hapus</Button>
+            {isMobile ? btn1 : btn2}
           </>
         )
       },
+      width: '140px',
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
-    }
+    },
   ];
 
   const paginationComponentOptions = {
@@ -208,7 +226,7 @@ export default function TablePuasa() {
       {/* Modal Add */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Tambah Data</Modal.Title>
         </Modal.Header>
         <form onSubmit={handleAdd}>
           <Modal.Body>
@@ -232,7 +250,7 @@ export default function TablePuasa() {
       {/* Modal Edit */}
       <Modal show={showEdit} onHide={handleCloseEdit} animation={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Data {rowData.id} - {rowData.nama_puasa}</Modal.Title>
+          <Modal.Title>Edit Data - {rowData.nama_puasa}</Modal.Title>
         </Modal.Header>
         <form onSubmit={handleUpdateSubmit}>
           <Modal.Body>
@@ -280,6 +298,7 @@ export default function TablePuasa() {
         paginationComponentOptions={paginationComponentOptions}
         actions={action}
         direction={Direction.AUTO}
+        highlightOnHover
       />
     </>
   )

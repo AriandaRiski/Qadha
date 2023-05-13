@@ -21,6 +21,7 @@ model Puasa {
   id          Int     @id @default(autoincrement())
   nama_puasa  String  @db.VarChar(250)
   tanggal_puasa DateTime @default(now())
+  user_id Int?
 }
 
 model User {

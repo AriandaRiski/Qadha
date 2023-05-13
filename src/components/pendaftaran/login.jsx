@@ -29,8 +29,15 @@ export default function Login() {
             password: values.password,
             callbackUrl: "/user/qadha_puasa/test"
         })
-        if (status.ok) router.push(status.url)
+        if (!status.ok){
+            alert('salah')
+        }
+        
+        return router.push(status.url)
+        
+
     }
+
 
     return (
         <>

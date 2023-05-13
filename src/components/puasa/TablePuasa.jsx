@@ -5,10 +5,12 @@ import AppContext from '@/context/appContext';
 import Alerts from './Alerts';
 import moment from 'moment';
 import { isMobile } from 'react-device-detect';
+import { useSession } from 'next-auth/react';
 
 export default function TablePuasa() {
 
   const value = useContext(AppContext);
+  const { data: session } = useSession();
 
   const [pending, setPending] = useState(true);
   const [data, setData] = useState([]);
@@ -26,7 +28,8 @@ export default function TablePuasa() {
 
   const [savePuasa, setSavePuasa] = useState({
     nama_puasa: "",
-    tanggal_puasa: new Date().toJSON()
+    tanggal_puasa: new Date().toJSON(),
+    user_id: session?.id
   })
 
   const handleSave = (e) => {
@@ -47,7 +50,8 @@ export default function TablePuasa() {
 
     setSavePuasa({
       nama_puasa: "",
-      tanggal_puasa: new Date().toJSON()
+      tanggal_puasa: new Date().toJSON(),
+      user_id: session?.id
     })
 
     if (result) {
@@ -130,12 +134,17 @@ export default function TablePuasa() {
 
   // Datatable
   useEffect(() => {
+
+    if (session) {
+      setSavePuasa({ ...savePuasa, user_id: parseInt(session?.id) })
+    }
+
     const timeout = setTimeout(() => {
       setData(value.puasa);
       setPending(false);
     }, 800);
     return () => clearTimeout(timeout);
-  }, [value.puasa]);
+  }, [value.puasa, session]);
 
   const columns = [
     {

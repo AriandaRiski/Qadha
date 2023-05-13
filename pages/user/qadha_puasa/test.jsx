@@ -1,4 +1,4 @@
-import {React, useState } from 'react'
+import { React, useState } from 'react'
 import TablePuasa from '@/components/puasa/TablePuasa';
 import Layout from '@/layouts/Layout';
 import { Container } from 'react-bootstrap';
@@ -16,7 +16,7 @@ export default function Test({ puasa }) {
       }}>
         <Layout title="Data Puasa">
           <Container>
-            <TablePuasa/>
+            <TablePuasa />
           </Container>
         </Layout>
       </AppContext.Provider>

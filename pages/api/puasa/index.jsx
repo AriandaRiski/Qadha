@@ -13,8 +13,17 @@ export default async function handler(req, res){
 const getPuasa = async(req, res) => {
     try {
         const result = await prisma.puasa.findMany();
-        return res.status(200).json(result);
+
+        // const result = await prisma.puasa.findMany({
+        //     where: {
+        //         user_id: req.body.user_id,
+        //       },
+        // });
+
+        return res.status(201).json(result);
+
     } catch (error) {
+        console.log(error)
         return res.status(500).json(error);
     }
 }
@@ -22,11 +31,12 @@ const getPuasa = async(req, res) => {
 const addPuasa = async(req,res) => {
     try {
 
-        const { nama_puasa, tanggal_puasa } = req.body;
+        const { nama_puasa, tanggal_puasa, user_id } = req.body;
 
         const data = {
             nama_puasa : nama_puasa,
-            tanggal_puasa : tanggal_puasa
+            tanggal_puasa : tanggal_puasa,
+            user_id : user_id
         }
 
         const result = await prisma.puasa.create({
@@ -40,6 +50,7 @@ const addPuasa = async(req,res) => {
         return res.status(200).json({...result, nama_puasa, tanggal_puasa, message : "Data Berhasil ditambahkan!"});
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json(error);
     }
 }

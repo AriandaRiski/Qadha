@@ -3,7 +3,7 @@ import { prisma } from "config/db";
 export default async function handler(req, res) {
     switch (req.method) {
         case "GET":
-            return await getPuasa(req, res);
+            return await getPuasaById(req, res);
         
         case "PUT":
             return await updatePuasa(req, res);
@@ -13,23 +13,21 @@ export default async function handler(req, res) {
     }
 }
 
-const getPuasa = async(req, res) => {
+const getPuasaById = async(req, res) => {
     try {
 
         const {id} = req.query;
-        const result = await prisma.puasa.findFirst({
+
+        const result = await prisma.puasa.findMany({
             where : {
-                id : {
-                    equals : parseInt(id)
-                }
+                user_id : parseInt(id)
             }
         })
 
-        return res.status(200).json(result);
+        return res.status(201).json(result);
 
     } catch (error) {
         return res.status(500).json({
-            success : false,
             message : " data tidak ditemukan!"
         });
     }
@@ -52,7 +50,7 @@ const updatePuasa = async(req, res) => {
             }
         })
 
-        return res.status(200).json({
+        return res.status(201).json({
             success : true,
             message : "data berhasil diupdate !",
             data : {
@@ -78,7 +76,7 @@ const deletePuasa = async(req, res) => {
             }
         })
 
-        return res.status(200).json({
+        return res.status(201).json({
             success : true,
             message : "data berhasil dihapus !"
         });

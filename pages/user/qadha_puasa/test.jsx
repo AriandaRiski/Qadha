@@ -3,6 +3,7 @@ import TablePuasa from '@/components/puasa/TablePuasa';
 import Layout from '@/layouts/Layout';
 import { Container } from 'react-bootstrap';
 import AppContext from '@/context/appContext';
+import { getSession } from 'next-auth/react';
 
 export default function Test({ puasa }) {
 
@@ -24,9 +25,11 @@ export default function Test({ puasa }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa`);
+  const user = await getSession(context);
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/puasa/${user.id}`);
   const getPuasa = await response.json();
 
   return {
